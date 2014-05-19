@@ -21,16 +21,26 @@ namespace MyConsoleApp
             };
 
             var drawComponents = new List<Component>();
-            var drawComponent = new Component
+            var blueComponent = new Component
             {
                 X = 10,
                 Y = 10,
                 Height = 20,
                 Width = 10,
                 BackgroundColor = ConsoleColor.DarkBlue,
-                Title = "Test"
+                Title = "WOW BLUE"
             };
-            drawComponents.Add(drawComponent);
+            var redComponent = new Component
+            {
+                X = 30,
+                Y = 20,
+                Height = 15,
+                Width = 15,
+                BackgroundColor = ConsoleColor.DarkRed,
+                Title = "SO RED"
+            };
+            drawComponents.Add(blueComponent);
+            drawComponents.Add(redComponent);
 
             while (true)
             {                
