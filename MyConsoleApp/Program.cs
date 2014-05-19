@@ -27,7 +27,8 @@ namespace MyConsoleApp
                 Y = 10,
                 Height = 20,
                 Width = 10,
-                BackgroundColor = ConsoleColor.DarkBlue
+                BackgroundColor = ConsoleColor.DarkBlue,
+                Title = "Test"
             };
             drawComponents.Add(drawComponent);
 
@@ -97,6 +98,7 @@ namespace MyConsoleApp
 
     internal class Component
     {
+        public string Title { get; set; }
         public int X { get; set; }
         public int Y { get; set; }
         public int Width { get; set; }
@@ -109,13 +111,27 @@ namespace MyConsoleApp
             Console.BackgroundColor = BackgroundColor;
             var stringBuilder = new StringBuilder();
 
+            var centerY = Height/2;
+            if (Width < Title.Length)
+            {
+                Width = Title.Length;
+            }
+            var xOffset = (Width - Title.Length) / 2;
+
             for (var y = 0; y < Height; y++)
             {
                 Console.CursorTop = Y + y;
                 for (var x = 0; x < Width; x++)
                 {
+                    var character = ' ';
+                    if (y == centerY 
+                        && x >= xOffset 
+                        && (x < xOffset + Title.Length))
+                    {
+                        character = Title[x - xOffset];
+                    }
                     Console.CursorLeft = X + x;
-                    Console.Write(" ");
+                    Console.Write(character);
                 }                                                
                 stringBuilder.Append(Environment.NewLine);
             }
