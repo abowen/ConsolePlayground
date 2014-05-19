@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace MyConsoleApp
 {
@@ -11,30 +12,63 @@ namespace MyConsoleApp
             Console.SetWindowSize(64, 48);
             Console.SetBufferSize(64, 48);
 
-            var items = new[]
+            var items = new []
             {
-                "Exit",
-                "Progress Bar"
+                new MenuItem { Action = ExitConsole, Key= ConsoleKey.D0, Title = "Exit" },
+                new MenuItem { Action = StartAsync, Key= ConsoleKey.D1, Title = "Progress Title" },                
             };
-
-            var key = ConsoleKey.Spacebar;
-
-            while (!Console.KeyAvailable && key != ConsoleKey.D0)
+            
+            while (true)
             {
                 PrintMenu(items);
                 var keyInfo = Console.ReadKey(true);
-                key = keyInfo.Key;
+                var key = keyInfo.Key;
                 Console.WriteLine("Key Pressed: {0}", key);
+                foreach (var item in items)
+                {
+                    if (item.Key == key)
+                    {
+                        item.Action();
+                    }
+                }
+                System.Threading.Thread.Sleep(100);
+                Console.Clear();                
             }
-
         }
 
-        public static void PrintMenu(string[] items)
+        public static void PrintMenu(MenuItem[] items)
         {
-            for (var i = 0; i < items.Count(); i++)
-            {
-                Console.WriteLine("{0}. {1}", i, items[i]);
+            foreach (var item in items)
+            {                
+                Console.WriteLine("{0}. {1}", item.Key, item.Title);
             }
         }
+
+        private static async void StartAsync()
+        {
+            await Task.Run(() =>
+            {
+                var value = 0;
+                while (value <= 100)
+                {                    
+                    Console.Title = value.ToString();
+                    System.Threading.Thread.Sleep(50);
+                    value++;
+                }
+            });
+        }
+
+        private static void ExitConsole()
+        {
+            Environment.Exit(0);
+        }
+
+    }
+
+    internal class MenuItem
+    {
+        public ConsoleKey Key;
+        public Action Action;
+        public string Title;
     }
 }
