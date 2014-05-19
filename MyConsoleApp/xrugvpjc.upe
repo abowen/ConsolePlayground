@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace MyConsoleApp
@@ -17,33 +16,28 @@ namespace MyConsoleApp
             var items = new[]
             {
                 new MenuItem { Action = ExitConsole, Key= ConsoleKey.D0, Title = "Exit" },
-                new MenuItem { Action = StartAsyncProgress, Key= ConsoleKey.D1, Title = "Progress Title" },                
+                new MenuItem { Action = StartAsync, Key= ConsoleKey.D1, Title = "Progress Title" },                
             };
 
             var drawComponents = new List<Component>();
             var drawComponent = new Component
             {
-                X = 10,
-                Y = 10,
-                Height = 20,
-                Width = 10,
-                BackgroundColor = ConsoleColor.DarkBlue
+                x = 10,
+                y = 10,
+                height = 20,
+                width = 10
             };
             drawComponents.Add(drawComponent);
 
             while (true)
-            {                
+            {
                 PrintMenu(items);
-
-                var x = Console.CursorLeft;
-                var y = Console.CursorTop;
                 foreach (var component in drawComponents)
                 {
-                    component.Draw();
-                }
-                Console.CursorLeft = x;
-                Console.CursorTop = y;
+                    Console.CursorLeft = component.x;
+                    Console.CursorTop = component.y;
 
+                }
                 var keyInfo = Console.ReadKey(true);
                 var key = keyInfo.Key;
                 Console.WriteLine("Key Pressed: {0}", key);
@@ -54,7 +48,7 @@ namespace MyConsoleApp
                         item.Action();
                     }
                 }
-                System.Threading.Thread.Sleep(15);
+                System.Threading.Thread.Sleep(100);
                 Console.Clear();
             }
         }
@@ -67,7 +61,7 @@ namespace MyConsoleApp
             }
         }
 
-        private static async void StartAsyncProgress()
+        private static async void StartAsync()
         {
             await Task.Run(() =>
             {
@@ -97,32 +91,9 @@ namespace MyConsoleApp
 
     internal class Component
     {
-        public int X { get; set; }
-        public int Y { get; set; }
-        public int Width { get; set; }
-        public int Height { get; set; }
-        public ConsoleColor BackgroundColor { get; set; }
-
-        public void Draw()
-        {            
-            
-            Console.BackgroundColor = BackgroundColor;
-            var stringBuilder = new StringBuilder();
-
-            for (var y = 0; y < Height; y++)
-            {
-                Console.CursorTop = Y + y;
-                for (var x = 0; x < Width; x++)
-                {
-                    Console.CursorLeft = X + x;
-                    Console.Write(" ");
-                }                                                
-                stringBuilder.Append(Environment.NewLine);
-            }
-            
-            Console.BackgroundColor = ConsoleColor.Black;
-            
-        }
-
+        public int x;
+        public int y;
+        public int width;
+        public int height;
     }
 }
